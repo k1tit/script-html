@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список пользователей</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Список пользователей</h1>
+<table id="users-table">
+    <thead>
+        <tr>  
+            <th>UserID</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>DateOfBirth</th>
+            <th>Country</th>
+            <th>City</th>
+            <th>ZipCode</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<script>
+const apiUrl = "http://localhost:3000/api";
+
+fetch(apiUrl)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка сети: ' + response.statusText);
+        }
+        return response.json(); // Парсинг JSON ответа
+    })
+    .then(data => {
+        displayData(data); // Вызов функции для отображения данных
+    })
+    .catch(error => {
+        console.error('Ошибка:', error);
+    });
+
+function displayData(data) {
+    const container = document.getElementById("data-container");
+
+    // Пример простого отображения данных
+    data.forEach(item => {
+        const div = document.createElement("div");
+        div.textContent = JSON.stringify(item); // Можно форматировать данные по желанию
+        container.appendChild(div);
+
+   
+    // Функция для отображения данных в таблице
+    function populateTable(users) {
+        const tableBody = document.querySelector('#users-table tbody');
+        tableBody.innerHTML = '';
+
+        users.forEach(user => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${user.UserID}</td>
+                <td>${user.FirstName}</td>
+                <td>${user.LastName}</td> 
+                <td>${user.DateOfBirth}</td>
+                <td>${user.Country}</td>
+                <td>${user.City}</td>
+                <td>${user.ZipCode}</td>
+                <td>${user.Address}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    window.onload = fetchData;
+</script>
+</body>
+</html>
+
+
+

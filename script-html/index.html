@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Данные из API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #data {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Данные из API</h1>
+    <button id="fetch-data">Получить данные</button>
+    <div id="data"></div>
+
+    <script>
+        document.getElementById('fetch-data').addEventListener('click', function() {
+            fetch('https://c0abo866.caspio.com/dp/e62060008000540ac3784c9a8dde')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Сетевая ошибка');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data); // Для отладки
+                    displayData(data);
+                })
+                .catch(error => console.error('Ошибка:', error));
+        });
+
+        function displayData(data) {
+            const dataDiv = document.getElementById('data');
+            dataDiv.innerHTML = ''; // Очищаем предыдущие данные
+            if (Array.isArray(data)) {
+                data.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.textContent = JSON.stringify(item); // Или используйте более удобный формат
+                    dataDiv.appendChild(itemDiv);
+                });
+            } else {
+                dataDiv.textContent = JSON.stringify(data); // Если не массив
+            }
+        }
+    </script>
+
+</body>
+</html>
